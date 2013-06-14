@@ -16,6 +16,7 @@
 
 		<link rel="stylesheet" href="css/reveal.min.css">
 		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css" id="theme">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -38,10 +39,254 @@
 
 <section>
   <h1>Ember.js</h1>
-  <br/><br/><br />
+  <br/>
   <h2>A framework for creating <br/>ambitious web applications.</h2>
+  <br />
+  <img src="img/ember.jpg" alt="Oh, hai!" />
+</section>
+<section>
+  <h1>MVC<span class="fragment appear">-ish</span></h1>
+  <br />
+  <p class="fragment fade-in">NOT server side MVC</p>
+  <br />
+  <p class="fragment fade-in">Many of the same terms<br/>but they mean different things</p>
+</section>
+<section>
+  <h1>MVC<span class="fragment fade-in">+</span></h1>
+  <ul>
+    <li>Model</li>
+    <li>View</li>
+    <li>Controller</li>
+    <li class="fragment fade-in">Router</li>
+    <li class="fragment fade-in">Route</li>
+    <li class="fragment fade-in">Template</li>
+  </ul>
+</section>
+<section>
+  <h3>Over Simplified Request Path</h3>
+  <br />
+  <div class="fragment fade-in">Router</div>
+  <div class="fragment fade-in">&darr;<br />Route</div>
+  <div class="fragment fade-in">&darr;<br />Controller</div>
+  <div class="fragment fade-in">&darr;<br />Model</div>
+  <div class="fragment fade-in">&darr;<br />View</div>
+  <div class="fragment fade-in">&darr;<br />Template</div>
+</section>
+<section>
+  <h2>Let's compare with Rails MVC<span class="fragment fade-in">+</span></h2>
+  <br>
+  <h3 class="fragment fade-in">MVC+ == MVC SPD</h3>
+  <br />
+  <h3 class="fragment fade-in">Services &amp; Presenters/Decorators</h3>
+</section>
+<section>
+  <h3>Comparison with Rails MVC SPD</h3>
+  <br />
+  <table class="comparison">
+    <tr>
+      <th>Ember</th>
+      <th>Rails</th>
+      <th>My Reaction</th>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Router</td>
+      <td>config/routes.rb</td>
+      <td class="fragment fade-in">makes sense</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Route</td>
+      <td>Controller action</td>
+      <td class="fragment fade-in">wat</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Controller</td>
+      <td>Service</td>
+      <td class="fragment fade-in">wat</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Model</td>
+      <td>Model</td>
+      <td class="fragment fade-in">Yay!</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>View</td>
+      <td>Presenter/Decorator</td>
+      <td class="fragment fade-in">wat</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Template</td>
+      <td>View/template</td>
+      <td class="fragment fade-in">wat</td>
+    </tr>
+  </table>
+</section>
+<section>
+  <h2>WAT?!?</h2>
+  <br />
+  <h1 class="fragment fade-in">Context Matters!</h1>
+  <br />
+  <h2 class="fragment fade-in">Different needs call for different solutions</h2>
+</section>
+<section>
+  <h3>Rails (Server side MVC) is stateless</h3>
+  <br />
+  <h3 class="fragment fade-in">Ember apps are stateful</h3>
+  <br /><br />
+  <h3 class="fragment fade-in">Rails has an explicit<br />request/response cycle</h3>
+  <br />
+  <h3 class="fragment fade-in">Ember apps are long running<br />with state transitions</h3>
+</section>
+<section>
+  <h1>A very simple Ember app</h1>
+</section>
+<section>
+  <pre><code>
+  //Set up the namespace for the app
+  UselessApp = Ember.Application.create();
+
+  &lt;script type="text/x-handlebars"&gt;
+    &lt;h1&gt;This app is useless!&lt;/h1&gt;
+  &lt;/script&gt;
+  </code></pre>
+  <br /><br />
+  <h3 class="fragment fade-in">Ember "magic" at work.</h3>
+  <br />
+  <h3 class="fragment fade-in">Only write the parts you need.</h3>
+</section>
+<section>
+  <h3>By default Ember starts with <br /> the Index route</h3>
+  <br /><br />
+  <h3 class="fragment fade-in">It also 'auto generates' any parts of the stack that you don't write</h3>
+</section>
+<section>
+  <h3>If you wanted to be explicit</h3>
+  <br />
+  <pre><code>
+  UselessApp = Ember.Application.create();
+
+  UselessApp.Router.map(function(){
+    this.route('index',{ path:'' })
+  });
+  
+  UselsssApp.IndexRoute = Ember.Route.extend({});
+
+  UselsssApp.IndexController = Ember.ObjectController.extend({});
+
+  UselsssApp.IndexView = Ember.View.extend({});
+
+  &lt;script type="text/x-handlebars" id="index"&gt;
+    &lt;h1&gt;This app is verbose AND useless!&lt;/h1&gt;
+  &lt;/script&gt;
+  </code></pre>
+</section>
+<section>
+  <img src="img/ember-fishy.png" alt="" />
+  <br />
+  <h3>Don't write it if you don't need it!</h3>
+</section>
+<section>
+  <h1>Understanding the pieces</h1>
+  <br /><br />
+  <h3 class="fragment fade-in">In order of decreasing subtlty</h3>
+</section>
+<section>
+  <h1>Models</h1>
+  <br />
+  <h3>Object wrapper for business data.</h3>
+</section>
+<section>
+  <h3>A simple model</h3>
+  <pre><code>
+  App.Person = Ember.Object.extend({
+    firstName: null,
+    lastName: null,
+
+    fullName: function() {
+      return this.get('firstName') + " " + this.get('lastName');
+    }.property('firstName', 'lastName')
+  });
+  </code></pre>
+</section>
+<section>
+  <h3>Using the model</h3>
+  <pre><code>
+    var me = App.Person.create({
+      firstName:'Jeremy',
+      lastName: 'Green'
+    });
+    var bob = App.Person.create({
+      firstName:'Bob',
+      lastName: 'Testerson'
+    });
+    alert( "Hi, I'm " + me.fullName() );
+
+    App.Person.find().toArray() // [me,bob]
+    App.Person.find({firstName:'Jeremy'}).toArray() // [me]
+  </code></pre>
+</section>
+<section>
+  <h1>Templates</h1>
+  <br />
+  <h3>The markup for the stuff that<br/>a user actually sees</h3>
+</section>
+<section>
+  <h1>Handlebars</h1>
+  <img src="img/handlebars.png" alt="" />
+</section>
+<section>
+  <h3>Handlebars templates are dumb</h3>
+  <img src="img/troll.png" alt="" width="300" class="fragment fade-in"/>
+  <p class="fragment fade-in">They can't contain much logic.</p>
+  <p class="fragment fade-in">Logic goes in the View.</p>
+</section>
+<section>
+  <pre><code>
+  &lt;script type="text/x-handlebars" id="blog_post"&gt;
+    &lt;div class="blog_post"&gt;
+      &lt;h1&gt;{{title}}&lt;/h1&gt;
+      &lt;h3&gt;{{author.fullName}}&lt;/h3&gt;
+
+      {{markdown body}}
+
+      {{#if BlogApp.currentUser.isAdmin}}
+        <button{{action edit this}}>Edit</button>
+      {{/if}}
+    &lt;/div&gt;
+  &lt;/script&gt;
+  </code></pre>
 </section>
 
+<section>
+  <h1>Router</h1>
+  <br />
+  <h3>The 'map' for distinct parts of your app</h3>
+  <br />
+  <p class="fragment fade-in">gives you bookmarkable/shareable URLs within your app</p>
+  <br />
+  <p class="fragment fade-in">handles reading/writing the URL bar</p>
+  <br />
+  <p class="fragment fade-in">passes 'path variables' into your Route</p>
+</section>
+<section>
+  <h3>Simple Router</h3>
+  <pre><code>
+    MyApp.Router.map(function() {
+      this.resource('about');
+      this.resource('galleries',function(){
+        this.resource('gallery',{ path: ':gallery_id' }, function(){
+          this.route('edit', {path: 'edit'})
+        })
+        this.route('new');
+      })
+    });
+  </code></pre>
+  
+  <p>http://myapp.com/#/about</p>
+  <p>http://myapp.com/#/galleries</p>
+  <p>http://myapp.com/#/galleries/123</p>
+  <p>http://myapp.com/#/galleries/123/edit</p>
+  <p>http://myapp.com/#/galleries/new</p>
+</section>
 
 <section>
     <h2>Thanks For Watching!</h2>
