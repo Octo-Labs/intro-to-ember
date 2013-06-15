@@ -16,7 +16,7 @@
 
 		<link rel="stylesheet" href="css/reveal.min.css">
 		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
-    <link rel="stylesheet" href="css/custom.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css" id="custom">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -67,8 +67,8 @@
   <br />
   <div class="fragment fade-in">Router</div>
   <div class="fragment fade-in">&darr;<br />Route</div>
-  <div class="fragment fade-in">&darr;<br />Controller</div>
   <div class="fragment fade-in">&darr;<br />Model</div>
+  <div class="fragment fade-in">&darr;<br />Controller</div>
   <div class="fragment fade-in">&darr;<br />View</div>
   <div class="fragment fade-in">&darr;<br />Template</div>
 </section>
@@ -125,7 +125,7 @@
   <br />
   <h1 class="fragment fade-in">Context Matters!</h1>
   <br />
-  <h2 class="fragment fade-in">Different needs call for different solutions</h2>
+  <h2 class="fragment fade-in">Different needs<br/>call for different solutions</h2>
 </section>
 <section>
   <h3>Rails (Server side MVC) is stateless</h3>
@@ -186,8 +186,40 @@
 </section>
 <section>
   <h1>Understanding the pieces</h1>
+</section>
+<section>
+  <table class="comparison">
+    <tr>
+      <th>Component</th>
+      <th>Function</th>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Model</td>
+      <td>Object wrapper for business data</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>View</td>
+      <td>Interaction logic</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Controller</td>
+      <td>Business logic</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Router</td>
+      <td>Browser/URL logic *</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Template</td>
+      <td>Markup for UI *</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Route</td>
+      <td>Controller setup / Model lookup &amp; filtering</td>
+    </tr>
+  </table>
   <br /><br />
-  <h3 class="fragment fade-in">In order of decreasing subtlty</h3>
+  <p class="fragment fade-in">* These components are artifacts of developing an app<br/>to be run inside of a browser.</p>
 </section>
 <section>
   <h1>Models</h1>
@@ -224,6 +256,113 @@
     App.Person.find({firstName:'Jeremy'}).toArray() // [me]
   </code></pre>
 </section>
+
+
+
+<section>
+  <h1>Views</h1>
+  <br />
+  <h3>Interaction logic</h3>
+  <br />
+  <p class="fragment fade-in">This is the place for jQuery DOM selectors and<br/>integration with other JS libs.</p>
+  <br />
+  <p class="fragment fade-in">Probably.</p>
+</section>
+
+<section>
+  <h2>Views are rarely needed</h2>
+  <br />
+  <p class="fragment fade-in">From the Ember View doc:</p>
+  <blockquote class="fragment fade-in">
+    Views in Ember.js are typically only created for the following reasons:
+    <br/><br />
+    When you need sophisticated handling<br/> of user events
+    <br/><br />
+    When you want to create<br/> a re-usable component
+    <br /><br />
+    Often, both of these requirements will be present at the same time.
+  </blockquote>
+</section>
+
+<section>
+  <h3>
+    Views should receive raw browser events and translate them
+    into semantically meaningful actions within the app.
+  </h3>
+</section>
+
+<section>
+  <h3>A simple View</h3>
+  <pre><code>
+  MyApp.SelectableModelView = Ember.View.extend({
+    click:function(event){
+      this.get('controller').toggleSelect();
+    }
+  });
+  </code></pre>
+</section>
+
+
+<section>
+  <h1>Controllers</h1>
+  <br />
+  <h3>Business logic</h3>
+  <br />
+  <p class="fragment fade-in">
+    Manipulaiton of models and triggering of related events.
+  </p>
+  <br />
+  <p class="fragment fade-in">Also a good place for transaction management.</p>
+</section>
+
+<section>
+  <h2>Controllers come in two flavors</h2>
+  <br />
+  <ul>
+    <li class="fragment fade-in">ObjectController - represents one single model object.<br /><br /></li>
+    <li class="fragment face-in">ArrayController - represents a collection of model objects.</li>
+  </ul>
+</section>
+
+<section>
+  <h3>A simple ObjectController</h3>
+  <pre><code>
+  MyApp.SelectableModelController = Ember.ObjectController.extend({
+    needs : ['lastSelectedModel'],
+    toggleSelect : function(){
+      this.set('selected', !this.get('selected'));
+      if(this.get('selected')){
+        this.get('controllers.lastSelectedModel').setLastSelected(this)
+      }
+    }
+  });
+  </code></pre>
+</section>
+
+<section>
+  <h3>A simple ArrayController</h3>
+  <pre><code>
+  MyApMyApp.SelectableModelListController = Ember.ArrayController.extend({
+    
+    selectNone:function(){
+      this.get('content').forEach(function(selectableModel){
+        selectableModel.set('selected',false);
+      });
+    },
+
+    selectAll:function(){
+      this.get('content').forEach(function(selectableModel){
+        selectableModel.set('selected',true);
+      });
+    }
+
+  });
+  </code></pre>
+</section>
+
+
+
+
 <section>
   <h1>Templates</h1>
   <br />
@@ -249,17 +388,29 @@
       {{markdown body}}
 
       {{#if BlogApp.currentUser.isAdmin}}
-        <button{{action edit this}}>Edit</button>
+        <button {{action edit this}}>Edit</button>
       {{/if}}
     &lt;/div&gt;
   &lt;/script&gt;
   </code></pre>
 </section>
 
+
+
+<section>
+  <h1>Route</h1>
+  <br />
+  <h3>Controller setup</h3>
+  <h3>Model lookup &amp; filtering</h3>
+
+</section>
+
 <section>
   <h1>Router</h1>
   <br />
-  <h3>The 'map' for distinct parts of your app</h3>
+  <h3>Browser URL logic</h3>
+  <br />
+  <p>The 'map' for distinct parts of your app</p>
   <br />
   <p class="fragment fade-in">gives you bookmarkable/shareable URLs within your app</p>
   <br />
