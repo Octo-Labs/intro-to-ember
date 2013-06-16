@@ -328,13 +328,13 @@
   <h3>A simple ObjectController</h3>
   <pre><code>
   MyApp.SelectableModelController = Ember.ObjectController.extend({
-    needs : ['lastSelectedModel'],
     toggleSelect : function(){
       this.set('selected', !this.get('selected'));
       if(this.get('selected')){
         this.get('controllers.lastSelectedModel').setLastSelected(this)
       }
-    }
+    },
+    needs : ['lastSelectedModel']
   });
   </code></pre>
 </section>
@@ -397,13 +397,7 @@
 
 
 
-<section>
-  <h1>Route</h1>
-  <br />
-  <h3>Controller setup</h3>
-  <h3>Model lookup &amp; filtering</h3>
 
-</section>
 
 <section>
   <h1>Router</h1>
@@ -437,6 +431,42 @@
   <p>http://myapp.com/#/galleries/123</p>
   <p>http://myapp.com/#/galleries/123/edit</p>
   <p>http://myapp.com/#/galleries/new</p>
+</section>
+
+
+<section>
+  <h1>Route</h1>
+  <br />
+  <h3>Controller setup</h3>
+  <h3>Model lookup &amp; filtering</h3>
+</section>
+<section>
+  <h3>A simple Route</h3>
+  <pre><code>
+  MyApp.GalleryEditRoute = Ember.Route.extend({
+
+    model: function(params){
+      return this.modelFor('gallery');
+    },
+
+    setupController: function(controller){
+      controller.startTransaction();
+    }
+
+  });
+  </code></pre>
+</section>
+
+<section>
+  <h1>When to use Ember</h1>
+  <br />
+  <h1>TBD</h1>
+</section>
+
+<section>
+  <h1>When NOT to use Ember</h1>
+  <br />
+  <h1>TBD</h1>
 </section>
 
 <section>
