@@ -45,6 +45,25 @@
   <img src="img/ember.jpg" alt="Oh, hai!" />
 </section>
 <section>
+  <h2>Where does the face<br/>of your web app live?</h2>
+</section>
+<section>
+  <h2>The 'traditional' web app</h2>
+  <br />
+  <ol>
+    <li class="fragment fade-in">Deliver a 'document' to the browser <br /><br /></li>
+    <li class="fragment fade-in">Apply a sprinkling of JavaScript</li>
+  </ol>
+</section>
+<section>
+  <h2>An Ember web app</h2>
+  <br />
+  <ol>
+    <li class="fragment fade-in">Deliver a full application to the browser <br /><br /></li>
+    <li class="fragment fade-in">Pull/push raw data via JSON</li>
+  </ol>
+</section>
+<section>
   <h1>MVC<span class="fragment appear">-ish</span></h1>
   <br />
   <p class="fragment fade-in">NOT server side MVC</p>
@@ -134,8 +153,54 @@
   <br /><br />
   <h3 class="fragment fade-in">Rails has an explicit<br />request/response cycle</h3>
   <br />
-  <h3 class="fragment fade-in">Ember apps are long running<br />with state transitions</h3>
+  <h3 class="fragment fade-in">Ember apps are long running<br />with internal state transitions</h3>
 </section>
+
+
+<section>
+  <h1>Understanding the pieces</h1>
+</section>
+<section>
+  <table class="comparison">
+    <tr>
+      <th>Component</th>
+      <th>Function</th>
+    </tr>
+
+    <tr class="fragment fade-in">
+      <td>Model</td>
+      <td>Object wrapper for business data</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>View</td>
+      <td>Interaction logic</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Controller</td>
+      <td>Business logic</td>
+    </tr>
+    <tr class="fragment fade-in">
+      <td>Route</td>
+      <td>Controller setup / Model lookup &amp; filtering</td>
+    </tr>
+
+    <tr class="fragment fade-in">
+      <td>Template</td>
+      <td>Markup for UI *</td>
+    </tr>
+
+    <tr class="fragment fade-in">
+      <td>Router</td>
+      <td>Browser/URL logic *</td>
+    </tr>
+
+  </table>
+  <br /><br />
+  <p class="fragment fade-in">* These components are artifacts of developing an app<br/>to be run inside of a browser.</p>
+</section>
+
+
+
 <section>
   <h1>A very simple Ember app</h1>
 </section>
@@ -154,9 +219,7 @@
   <h3 class="fragment fade-in">Only write the parts you need.</h3>
 </section>
 <section>
-  <h3>By default Ember starts with <br /> the Index route</h3>
-  <br /><br />
-  <h3 class="fragment fade-in">It also 'auto generates' any parts of the stack that you don't write</h3>
+  <h3>Ember will 'auto generate' any parts of the stack that you don't write</h3>
 </section>
 <section>
   <h3>If you wanted to be explicit</h3>
@@ -184,43 +247,12 @@
   <br />
   <h3>Don't write it if you don't need it!</h3>
 </section>
-<section>
-  <h1>Understanding the pieces</h1>
-</section>
-<section>
-  <table class="comparison">
-    <tr>
-      <th>Component</th>
-      <th>Function</th>
-    </tr>
-    <tr class="fragment fade-in">
-      <td>Model</td>
-      <td>Object wrapper for business data</td>
-    </tr>
-    <tr class="fragment fade-in">
-      <td>View</td>
-      <td>Interaction logic</td>
-    </tr>
-    <tr class="fragment fade-in">
-      <td>Controller</td>
-      <td>Business logic</td>
-    </tr>
-    <tr class="fragment fade-in">
-      <td>Router</td>
-      <td>Browser/URL logic *</td>
-    </tr>
-    <tr class="fragment fade-in">
-      <td>Template</td>
-      <td>Markup for UI *</td>
-    </tr>
-    <tr class="fragment fade-in">
-      <td>Route</td>
-      <td>Controller setup / Model lookup &amp; filtering</td>
-    </tr>
-  </table>
-  <br /><br />
-  <p class="fragment fade-in">* These components are artifacts of developing an app<br/>to be run inside of a browser.</p>
-</section>
+
+
+
+
+
+
 <section>
   <h1>Models</h1>
   <br />
@@ -229,7 +261,7 @@
 <section>
   <h3>A simple model</h3>
   <pre><code>
-  App.Person = Ember.Object.extend({
+  UselessApp.Person = Ember.Object.extend({
     firstName: null,
     lastName: null,
 
@@ -242,65 +274,90 @@
 <section>
   <h3>Using the model</h3>
   <pre><code>
-    var me = App.Person.create({
+    var me = UselessApp.Person.create({
       firstName:'Jeremy',
       lastName: 'Green'
     });
-    var bob = App.Person.create({
-      firstName:'Bob',
-      lastName: 'Testerson'
-    });
-    alert( "Hi, I'm " + me.fullName() );
 
-    App.Person.find().toArray() // [me,bob]
-    App.Person.find({firstName:'Jeremy'}).toArray() // [me]
+    alert( "Hi, I'm " + me.get('fullName') );
   </code></pre>
 </section>
 
 
 
 <section>
-  <h1>Views</h1>
+  <h1>Route</h1>
   <br />
-  <h3>Interaction logic</h3>
-  <br />
-  <p class="fragment fade-in">This is the place for jQuery DOM selectors and<br/>integration with other JS libs.</p>
-  <br />
-  <p class="fragment fade-in">Probably.</p>
+  <h3>Controller setup</h3>
+  <h3>Model creation/lookup/filtering</h3>
 </section>
-
 <section>
-  <h2>Views are rarely needed</h2>
-  <br />
-  <p class="fragment fade-in">From the Ember View doc:</p>
-  <blockquote class="fragment fade-in">
-    Views in Ember.js are typically only created for the following reasons:
-    <br/><br />
-    When you need sophisticated handling<br/> of user events
-    <br/><br />
-    When you want to create<br/> a re-usable component
-    <br /><br />
-    Often, both of these requirements will be present at the same time.
-  </blockquote>
-</section>
-
-<section>
-  <h3>
-    Views should receive raw browser events and translate them
-    into semantically meaningful actions within the app.
-  </h3>
-</section>
-
-<section>
-  <h3>A simple View</h3>
+  <h3>A simple Route</h3>
   <pre><code>
-  MyApp.SelectableModelView = Ember.View.extend({
-    click:function(event){
-      this.get('controller').toggleSelect();
+  UselessApp.IndexRoute = Ember.Route.extend({
+
+    model: function(params){
+      return UselessApp.Person.create({
+        firstName:"Jeremy",
+        lastName:"Green"
+      });
     }
+
   });
   </code></pre>
 </section>
+<section>
+  <h3>And updated templates</h3>
+  <pre><code>
+  &lt;script type="text/x-handlebars"&gt;
+    &lt;h1&gt;This app is useless!&lt;/h1&gt;
+    &lt;hr /&gt;
+    {{outlet}}
+  &lt;/script&gt;
+
+  &lt;script type="text/x-handlebars" data-template-name="index"&gt;
+    &lt;p&gt;Created by : {{fullName}}&lt;/p&gt;
+  &lt;/script&gt;
+  </code></pre>
+</section>
+
+
+
+
+
+<section>
+  <h1>Templates</h1>
+  <br />
+  <h3>The markup for the stuff that<br/>a user actually sees</h3>
+</section>
+<section>
+  <h1>Handlebars</h1>
+  <img src="img/handlebars.png" alt="" />
+</section>
+<section>
+  <h3>Handlebars templates are dumb</h3>
+  <img src="img/troll.png" alt="" width="300" class="fragment fade-in"/>
+  <p class="fragment fade-in">They can't contain much logic.</p>
+  <p class="fragment fade-in">Logic goes in the View.</p>
+</section>
+<section>
+  <h3>But they're smart when it<br/>comes to data binding</h3>
+  <br />
+  <pre><code>
+    &lt;script type="text/x-handlebars" data-template-name="index"&gt;
+      &lt;p&gt;Created by : {{fullName}}&lt;/p&gt;
+      &lt;p&gt;
+      {{view Em.TextField valueBinding='content.firstName'}}
+      {{view Em.TextField valueBinding='content.lastName'}}
+      &lt;/p&gt;
+    &lt;/script&gt;
+  </code></pre>
+</section>
+
+
+
+
+
 
 
 <section>
@@ -323,7 +380,30 @@
     <li class="fragment face-in">ArrayController - represents a collection of model objects.</li>
   </ul>
 </section>
+<section>
+  <h3>A simple ObjectController</h3>
+  <pre><code>
+  UselessApp.IndexController = Ember.ObjectController.extend({
+    isEditing:       false,
+    toggleEditing:   function(){this.set('isEditing'),!this.set('isEditing')}
+  });
+  </code></pre>
+</section>
+<section>
+  <h3>And more updates to templates</h3>
+  <pre><code>
+  &lt;script type="text/x-handlebars" data-template-name="index"&gt;
+    &lt;p&gt;Created by : {{fullName}} - &lt;a href="#"{{action toggleEditing}}&gt;Edit&lt;/a&gt;&lt;/p&gt;
+    {{#if isEditing}}
+    &lt;p&gt;
+    {{view Em.TextField valueBinding='content.firstName'}} {{view Em.TextField valueBinding='content.lastName'}}
+    &lt;/p&gt;
+    {{/if}}
+  &lt;/script&gt;
+  </code></pre>
+</section>
 
+<!--
 <section>
   <h3>A simple ObjectController</h3>
   <pre><code>
@@ -338,9 +418,10 @@
   });
   </code></pre>
 </section>
+-->
 
 <section>
-  <h3>A simple ArrayController</h3>
+  <h3>A fictitious ArrayController</h3>
   <pre><code>
   MyApMyApp.SelectableModelListController = Ember.ArrayController.extend({
     
@@ -362,43 +443,6 @@
 
 
 
-
-<section>
-  <h1>Templates</h1>
-  <br />
-  <h3>The markup for the stuff that<br/>a user actually sees</h3>
-</section>
-<section>
-  <h1>Handlebars</h1>
-  <img src="img/handlebars.png" alt="" />
-</section>
-<section>
-  <h3>Handlebars templates are dumb</h3>
-  <img src="img/troll.png" alt="" width="300" class="fragment fade-in"/>
-  <p class="fragment fade-in">They can't contain much logic.</p>
-  <p class="fragment fade-in">Logic goes in the View.</p>
-</section>
-<section>
-  <pre><code>
-  &lt;script type="text/x-handlebars" id="blog_post"&gt;
-    &lt;div class="blog_post"&gt;
-      &lt;h1&gt;{{title}}&lt;/h1&gt;
-      &lt;h3&gt;{{author.fullName}}&lt;/h3&gt;
-
-      {{markdown body}}
-
-      {{#if BlogApp.currentUser.isAdmin}}
-        <button {{action edit this}}>Edit</button>
-      {{/if}}
-    &lt;/div&gt;
-  &lt;/script&gt;
-  </code></pre>
-</section>
-
-
-
-
-
 <section>
   <h1>Router</h1>
   <br />
@@ -413,7 +457,20 @@
   <p class="fragment fade-in">passes 'path variables' into your Route</p>
 </section>
 <section>
-  <h3>Simple Router</h3>
+  <h3>Simple Route with Template</h3>
+  <pre><code>
+    UselessApp.Router.map(function() {
+      this.resource('random_echo',{path:'random_echo/:echo_text'});
+    });
+
+    &lt;script type="text/x-handlebars" data-template-name="random_echo"&gt;
+      &lt;h3&gt;Random : {{random}}&lt;/h3&gt;
+      &lt;h3&gt;Echo : {{echo_text}}&lt;/h3&gt;
+    &lt;/script&gt;
+  </code></pre>
+</section>
+<section>
+  <h3>Simple CRUD Router</h3>
   <pre><code>
     MyApp.Router.map(function() {
       this.resource('about');
@@ -434,39 +491,68 @@
 </section>
 
 
+
+
+
+
 <section>
-  <h1>Route</h1>
+  <h1>Views</h1>
   <br />
-  <h3>Controller setup</h3>
-  <h3>Model lookup &amp; filtering</h3>
+  <h3>Interaction logic</h3>
+  <br />
+  <p class="fragment fade-in">This is the place for jQuery DOM selectors and<br/>integration with other JS libs.</p>
+  <br />
+  <p class="fragment fade-in">Probably.</p>
 </section>
 <section>
-  <h3>A simple Route</h3>
+  <h2>Views are rarely needed</h2>
+  <br />
+  <p class="fragment fade-in">From the Ember View doc:</p>
+  <blockquote class="fragment fade-in">
+    Views in Ember.js are typically only created for the following reasons:
+    <br/><br />
+    When you need sophisticated handling<br/> of user events
+    <br/><br />
+    When you want to create<br/> a re-usable component
+    <br /><br />
+    Often, both of these requirements will be present at the same time.
+  </blockquote>
+</section>
+<section>
+  <h3>
+    Views should receive raw browser events and translate them
+    into semantically meaningful actions within the app.
+  </h3>
+</section>
+<section>
+  <h3>A simple View</h3>
   <pre><code>
-  MyApp.GalleryEditRoute = Ember.Route.extend({
-
-    model: function(params){
-      return this.modelFor('gallery');
-    },
-
-    setupController: function(controller){
-      controller.startTransaction();
+  UselessApp.RandomEchoView = Ember.View.extend({
+    mouseMove : function(){
+      this.controller.set('random',Math.random())
     }
-
   });
   </code></pre>
 </section>
 
+
+
+
 <section>
-  <h1>When to use Ember</h1>
-  <br />
-  <h1>TBD</h1>
+  <h3>Additional Demos / Q&amp;A</h3>
+</section>
+
+
+
+
+
+
+<section>
+  <h1>When to use Ember?</h1>
 </section>
 
 <section>
-  <h1>When NOT to use Ember</h1>
-  <br />
-  <h1>TBD</h1>
+  <h1>When NOT to use Ember?</h1>
 </section>
 
 <section>
